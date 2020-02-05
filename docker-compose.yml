@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   soulseek:
     build: .
@@ -8,9 +8,9 @@ services:
     ports:
       - 6080:6080
     volumes:
-      - appdata:/root/.SoulseekQt
-      - logs:/root/Soulseek Chat Logs
-      - downloads:/root/Soulseek Downloads
+      - appdata:/slsk/.SoulseekQt
+      - logs:/slsk/Soulseek Chat Logs
+      - downloads:/slsk/Soulseek Downloads
 volumes:
   appdata:
   logs:

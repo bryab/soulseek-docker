@@ -1,4 +1,14 @@
 #/bin/sh
+username=root
+if [ ! -z "$PGID" ] && [ ! -z "$PUID" ]
+then
+    groupadd -g $PGID slsk
+    useradd -u $PUID -g $PGID slsk -d /slsk -s /bin/bash
+    username=slsk
+else
+    mkdir /slsk
+fi
+chown -R $username /squashfs-root
 resolution=${resolution:-1280x720}x16
 [ "$resize" = "auto" ] && sed -r -i '/src/s/"[^"]+"/"vnc.html?autoconnect=true"/' /usr/share/novnc/index.html
 [ "$resize" = "scale" ] && sed -r -i '/src/s/"[^"]+"/"vnc.html?autoconnect=true\&resize=scale"/' /usr/share/novnc/index.html
@@ -17,7 +27,7 @@ autorestart=true
 priority=200
 
 [program:openbox]
-environment=HOME="/root",DISPLAY=":1",USER="root"
+environment=HOME="/slsk",DISPLAY=":1",USER="$username"
 command=/usr/bin/openbox
 autorestart=true
 priority=300
@@ -28,8 +38,9 @@ autorestart=true
 priority=400
 
 [program:soulseek]
-environment=HOME="/root",DISPLAY=":1",USER="root"
+environment=HOME="/slsk",DISPLAY=":1",USER="$username"
 command=/squashfs-root/SoulseekQt
+user=$username
 autorestart=true
 priority=500" > /etc/supervisord.conf
 /usr/bin/supervisord -c /etc/supervisord.conf
